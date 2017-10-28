@@ -24,18 +24,26 @@ public class DestroyByContact : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) 
 	{
-		if (other.tag != "Boundary") {
-			// Destroy happens at the end of the frame
-			// so order does not matter
-			Instantiate (explosion, transform.position, transform.rotation);
-			if (other.tag == "Player") 
-			{ 
-				Instantiate (playerExplosion, other.transform.position, other.transform.rotation);
-				gameController.GameOver ();
-			}
-			//gameController.AddScore (scoreValue);
-			Destroy (other.gameObject);
-			Destroy (gameObject);
+		if (other.CompareTag("Boundary") || other.CompareTag("Enemy")) 
+		{
+			return;
 		}
+	
+		// Destroy happens at the end of the frame
+		// so order does not matter
+
+		if (explosion != null) 
+		{
+			Instantiate (explosion, transform.position, transform.rotation);
+		}
+
+		if (other.CompareTag("Player"))
+		{ 
+			Instantiate (playerExplosion, other.transform.position, other.transform.rotation);
+			gameController.GameOver ();
+		}
+		gameController.AddScore (scoreValue);
+		Destroy (other.gameObject);
+		Destroy (gameObject);
 	}
 }
